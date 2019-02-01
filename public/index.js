@@ -6,15 +6,13 @@ import { Provider } from 'react-redux';
 import middleware from '../src/middleware'
 import session from '../src/reducers/authUser';
 
-import Login from '../src/components/Login';
+import App from '../src/components/App';
 
 const store = createStore(session, middleware);
 
-console.log(store.getState());
-
 ReactDOM.render(
     <Provider store={store}>
-        <Login />
+        <App />
     </Provider>,
     document.getElementById('root')
 );
