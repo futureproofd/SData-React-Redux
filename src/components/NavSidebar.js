@@ -5,15 +5,14 @@ import {
     Link
 } from 'react-router-dom';
 
-import GridContainer from './GridContainer';
+import GridContainer from './grid/GridContainer';
 
 
 class NavSidebar extends Component{
 /*TODO: get that routes array based on user permissions*/
     render(){
-
         const { isAuthenticated } = this.props;
-
+        //define custom routes and props here
         const routes = [
             {
                 path: '/leads',

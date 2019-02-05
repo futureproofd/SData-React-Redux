@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { handleEntitiesQuery } from '../actions/getEntity';
-import {formatDateLast30 }from '../utils/date';
+import { handleEntitiesQuery } from '../../actions/getEntity';
+import {formatDateLast30 }from '../../utils/date';
+
+import GridView from './GridView';
 
 class GridContainer extends Component {
 
@@ -17,12 +19,12 @@ class GridContainer extends Component {
     }
 
     render(){
-        const { session, dispatch } = this.props;
+        const { session, entity } = this.props;
         return (
             <div style={{ flex: 1, padding: "10px" }}>
-                {session.isAuthenticated ? (
+                {session.isAuthenticated && entity ? (
                     <div>
-                        Grid Container
+                        <GridView entity={entity}/>
                     </div> 
                 ):(
                     <div>Please Login</div>
@@ -34,11 +36,11 @@ class GridContainer extends Component {
 }
 
 function mapStateToProps(state) {
-    const { session, token, entityType } = state;
+    const { session, token, entity } = state;
     return {
         session,
         token,
-        entityType
+        entity
     }
   }
 
