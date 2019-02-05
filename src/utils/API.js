@@ -33,6 +33,25 @@ export function SDataService(sdataUri, username, password) {
       }
       return handleSdataResponse(axios.get(url, _config), 200, callback)
     },
+
+    read: function (resourceKind, where, queryArgs, callback) {
+      var url = sdataUri + resourceKind + '?format=json'
+      if (where && !(queryArgs && 'where' in queryArgs)) {
+        //encode the URI for sData, space-delimited where clause
+        url += '&where=' + encodeURIComponent(where)
+      }
+      if (queryArgs) {
+        if (typeof (queryArgs) == 'function' && !callback) {
+          callback = queryArgs;
+        } else {
+          for (var k in queryArgs) {
+            if (queryArgs.hasOwnProperty(k))
+              url += '&' + k + '=' + encodeURIComponent(queryArgs[k]);
+          }
+        }
+      }
+      return handleSdataResponse(axios.get(url, _config), 200, callback)
+    }
   };
 
   //authenticate if user invokes sData service function with credentials

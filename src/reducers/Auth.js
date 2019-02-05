@@ -9,7 +9,7 @@ export default function session ( state = {
             //todo: put jwt in local storage for now
                 return(
                     {
-                        session : action.session,
+                        sData : action.sData,
                         token : action.token,
                         isAuthenticated : action.isAuthenticated
                     }

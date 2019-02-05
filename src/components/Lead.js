@@ -2,14 +2,7 @@ import React, { Component } from 'react';
 
 class Lead extends Component {
     render(){
-                /*testing. move this
-        sData.get('accounts','A6UJ9A000I26')
-            .then((res) =>{
-                console.log(res)
-            }).catch(() => {
-                alert('an error occurred. Try again.');
-            })
-          */  
+        
         return (
             <form>
             <fieldset disabled>

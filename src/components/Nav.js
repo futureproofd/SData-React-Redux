@@ -6,12 +6,7 @@ import { handleLogin, handleLogout } from '../actions/authSession';
 import NavSidebar from './NavSidebar';
 
 class Nav extends Component{
-    constructor(props, context){
-        super(props,context);
-        console.log('nav props', props);
-        console.log('nav context', context);
-    }
-    
+
     render(){
         const { dispatch, isAuthenticated } = this.props;
         return(
@@ -26,7 +21,7 @@ class Nav extends Component{
                     )}
                 </div>
              </nav>
-                {isAuthenticated && <NavSidebar/>}
+                {isAuthenticated && <NavSidebar isAuthenticated/>}
             </div>
         )
     }

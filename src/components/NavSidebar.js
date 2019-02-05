@@ -5,18 +5,20 @@ import {
     Link
 } from 'react-router-dom';
 
-import DetailContainer from './DetailContainer';
+import GridContainer from './GridContainer';
 
 
 class NavSidebar extends Component{
 /*TODO: get that routes array based on user permissions*/
     render(){
-        const { dispatch, isAuthenticated } = this.props;
+
+        const { isAuthenticated } = this.props;
 
         const routes = [
             {
                 path: '/leads',
-                component: DetailContainer
+                component: GridContainer,
+                isAuthenticated: isAuthenticated
             }
         ]
 
@@ -35,11 +37,11 @@ class NavSidebar extends Component{
                             </div>
                         </nav>
                     </div>
-                    {routes.map(({path, component: C})=> (
+                    {routes.map(({path, component: C, isAuthenticated: auth})=> (
                         <Route 
                             path={path} 
                             render={
-                                (props) => <C {...props} isAuthenticated dispatch />
+                                (props) => <C {...props} isAuthenticated={auth} />
                             }
                         />
                     ))}

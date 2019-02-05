@@ -3,10 +3,10 @@ import { SDataService } from '../utils/API';
 export const USER_SESSION = "USER_SESSION";
 export const LOGOUT_SESSION = "LOGOUT_SESSION";
 
-function _userSession(session, token){
+function _userSession(sData, token){
     return{
         type: USER_SESSION,
-        session, 
+        sData, 
         token,
         isAuthenticated : true
     }
