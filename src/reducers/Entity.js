@@ -1,4 +1,4 @@
-import { ENTITY_LIST } from '../actions/getEntity';
+import { ENTITY_LIST, ENTITY_DETAIL } from '../actions/getEntity';
 
 export default function entity (state, action){
     switch(action.type){
@@ -6,6 +6,13 @@ export default function entity (state, action){
             return (
                 {
                     [action.entityType] : action.entity
+                }
+            )
+        case ENTITY_DETAIL :
+            return (
+                {
+                    ...state,
+                    [action.entityType +' Detail'] : action.entity
                 }
             )
         default : 

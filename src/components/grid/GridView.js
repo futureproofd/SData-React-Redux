@@ -5,7 +5,6 @@ import {
     Route,
     Link
 } from 'react-router-dom';
-
 import "react-table/react-table.css";
 
 import DetailContainer from '../detail/DetailContainer';
@@ -41,7 +40,7 @@ export default class GridView extends Component {
                             accessor: "Company",                             
                             Cell: row => (
                                 <span>
-                                    <Link to="/lead" className="nav-link active">{row.value}</Link>
+                                    <Link to={{pathname:`/Lead/${row.original.$key}`}} className="nav-link active">{row.value}</Link>
                                 </span>
                             )
                         },
@@ -67,9 +66,8 @@ export default class GridView extends Component {
                     getTdProps={this.onRowClick}
                 />
                 <Route
-                    path='/lead'
+                    path='/Lead/:id'
                     component={DetailContainer}
-                    //TODO: row._original.$key
                 />
             </div>
             </Router>

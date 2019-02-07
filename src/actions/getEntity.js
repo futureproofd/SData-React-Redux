@@ -1,9 +1,18 @@
 
 export const ENTITY_LIST = "ENTITY_LIST";
+export const ENTITY_DETAIL = "ENTITY_DETAIL";
 
 function _entityList(data, entityType){
-    return{
+    return {
         'type' : ENTITY_LIST,
+        'entityType' : [entityType],
+        'entity' : data
+    }
+}
+
+function _entityDetail(data, entityType){
+    return {
+        'type' : ENTITY_DETAIL,
         'entityType' : [entityType],
         'entity' : data
     }
@@ -29,3 +38,9 @@ export function handleEntitiesQuery(session, entity, where){
         })
     }
 };
+
+export function handleSingleEntity(entity, entityType){
+    return (dispatch) => {
+        dispatch(_entityDetail(entity, entityType))
+    }
+}

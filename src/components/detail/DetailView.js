@@ -11,4 +11,4 @@ class DetailView extends Component{
         }
     }
     
-    export default DetailView;
+export default DetailView;
