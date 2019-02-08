@@ -29,16 +29,23 @@ class DetailContainer extends Component {
     }
 
     render(){
-        const { session, entity, location } = this.props;
+        debugger
+        const { session, entity, isFetching } = this.props;
         return (
-            <div style={{ flex: 1, padding: "10px" }}>
-                {session.isAuthenticated && entity ? (
+            <div style={{ flex: 1, padding: "2px" }}>
+
+            {isFetching ? (
+                <Loading isFetching />
+            ) : (
+                session.isAuthenticated && !isFetching ? (
                     <div>
                         <DetailView entity={entity}/>
                     </div> 
                 ):(
                     <div>Please Login</div>
-                )}
+                )
+            )}
+                
             </div>
 
         )
@@ -47,9 +54,11 @@ class DetailContainer extends Component {
 
 function mapStateToProps(state) {
     const { session, entity } = state;
+    const { isFetching } = entity ||  { isFetching : true }; 
     return {
         session,
-        entity
+        entity,
+        isFetching
     }
   }
 

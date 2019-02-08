@@ -5,6 +5,7 @@ import { handleEntitiesQuery } from '../../actions/getEntity';
 import {formatDateLast30 }from '../../utils/date';
 
 import GridView from './GridView';
+import Loading from '../Loading';
 
 class GridContainer extends Component {
 
@@ -19,16 +20,21 @@ class GridContainer extends Component {
     }
 
     render(){
-        const { session, entity } = this.props;
+        const { session, entity, isFetching} = this.props;
         return (
-            <div style={{ flex: 1, padding: "10px" }}>
-                {session.isAuthenticated && entity ? (
+            <div style={{ flex: 1, padding: "2px" }}>
+
+            {isFetching ? (
+                <Loading isFetching />
+            ) : (
+                session.isAuthenticated && !isFetching ? (
                     <div>
                         <GridView entity={entity}/>
                     </div> 
                 ):(
                     <div>Please Login</div>
-                )}
+                )
+            )}
             </div>
 
         )
@@ -37,10 +43,12 @@ class GridContainer extends Component {
 
 function mapStateToProps(state) {
     const { session, token, entity } = state;
+    const { isFetching } = entity ||  { isFetching : true }; 
     return {
         session,
         token,
-        entity
+        entity,
+        isFetching
     }
   }
 

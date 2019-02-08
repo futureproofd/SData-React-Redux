@@ -1,18 +1,28 @@
-import { ENTITY_LIST, ENTITY_DETAIL } from '../actions/getEntity';
+import { ENTITY_LIST, ENTITY_DETAIL, ENTITY_REQUEST } from '../actions/getEntity';
 
 export default function entity (state, action){
     switch(action.type){
         case ENTITY_LIST :
             return (
                 {
-                    [action.entityType] : action.entity
+                    ...state,
+                    [action.entityType] : action.entity,
+                    'isFetching' : false
                 }
             )
         case ENTITY_DETAIL :
             return (
                 {
                     ...state,
-                    [action.entityType +' Detail'] : action.entity
+                    [action.entityType +' Detail'] : action.entity,
+                    'isFetching' : false
+                }
+            )
+        case ENTITY_REQUEST : 
+            return (
+                {
+                    ...state,
+                    'isFetching' : true
                 }
             )
         default : 

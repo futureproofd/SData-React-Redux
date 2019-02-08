@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Nav from '../components/Nav';
+import NavTop from '../components/NavTop';
 
 class App extends Component {
 
@@ -9,7 +9,7 @@ class App extends Component {
         const { dispatch, session } = this.props;
         return (
             <div>
-                <Nav
+                <NavTop
                     isAuthenticated={session.isAuthenticated}
                     dispatch={dispatch}
                 />

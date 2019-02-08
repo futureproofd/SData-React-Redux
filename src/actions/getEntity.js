@@ -1,12 +1,13 @@
-
 export const ENTITY_LIST = "ENTITY_LIST";
 export const ENTITY_DETAIL = "ENTITY_DETAIL";
+export const ENTITY_REQUEST = "ENTITY_REQUEST";
 
 function _entityList(data, entityType){
     return {
         'type' : ENTITY_LIST,
         'entityType' : [entityType],
-        'entity' : data
+        'entity' : data,
+        'isFetching' : false
     }
 }
 
@@ -14,12 +15,21 @@ function _entityDetail(data, entityType){
     return {
         'type' : ENTITY_DETAIL,
         'entityType' : [entityType],
-        'entity' : data
+        'entity' : data,
+        'isFetching': false
+    }
+}
+
+function _entityRequest(){
+    return {
+        'type' : ENTITY_REQUEST,
+        'isFetching' : true
     }
 }
 
 export function handleEntitiesQuery(session, entity, where){
     return (dispatch) => {
+        dispatch(_entityRequest());
         session.sData.read(entity, where)
         .then((res) =>{
             if(res){
@@ -29,8 +39,8 @@ export function handleEntitiesQuery(session, entity, where){
                 }else if(res.$descriptor.indexOf('account') > 0){
                     type = "Accounts"
                 }
-                dispatch(_entityList(res, type))
-            } else{
+                dispatch(_entityList(res, type));
+            } else {
                 console.log('error');
             } 
         }).catch(() => {
@@ -41,6 +51,7 @@ export function handleEntitiesQuery(session, entity, where){
 
 export function handleSingleEntity(entity, entityType){
     return (dispatch) => {
-        dispatch(_entityDetail(entity, entityType))
+        dispatch(_entityRequest());
+        dispatch(_entityDetail(entity, entityType));
     }
 }

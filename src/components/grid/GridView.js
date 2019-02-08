@@ -10,7 +10,7 @@ import "react-table/react-table.css";
 import DetailContainer from '../detail/DetailContainer';
 
 export default class GridView extends Component { 
-
+/*
     onRowClick = (state, rowInfo, column, instance) => {
         return {
             onClick: e => {
@@ -25,7 +25,7 @@ export default class GridView extends Component {
     handleButtonClick(e, row){
         console.log('clicked', e,row);
     }
-
+*/
     render(){
         const {entity} = this.props;
         const pageCount = Math.floor(entity.Leads.$totalResults / 100);

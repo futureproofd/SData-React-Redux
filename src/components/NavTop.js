@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-import Login from '../components/Login';
-import Logout from '../components/Logout';
+import Login from './Login';
+import Logout from './Logout';
 import { handleLogin, handleLogout } from '../actions/authSession';
 import NavSidebar from './NavSidebar';
 
-class Nav extends Component{
+class NavTop extends Component{
 
     render(){
         const { dispatch, isAuthenticated } = this.props;
@@ -27,4 +27,4 @@ class Nav extends Component{
     }
 }
 
-export default Nav;
+export default NavTop;
