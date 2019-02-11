@@ -37,7 +37,7 @@ class NavSidebar extends Component{
                         </nav>
                     </div>
                     {routes.map(({path, component: C, isAuthenticated: auth})=> (
-                        <Route 
+                        <Route key={path}
                             path={path} 
                             render={
                                 (props) => <C {...props} isAuthenticated={auth} />

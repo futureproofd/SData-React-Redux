@@ -28,7 +28,7 @@ export default class GridView extends Component {
 */
     render(){
         const {entity} = this.props;
-        const pageCount = Math.floor(entity.Leads.$totalResults / 100);
+        let pageCount = Math.floor(entity.Leads.$totalResults / 100);
         return(
             <Router>
             <div>
@@ -40,7 +40,7 @@ export default class GridView extends Component {
                             accessor: "Company",                             
                             Cell: row => (
                                 <span>
-                                    <Link to={{pathname:`/Lead/${row.original.$key}`}} className="nav-link active">{row.value}</Link>
+                                    <Link key={row.original.$key} to={{pathname:`/Lead/${row.original.$key}`}} className="nav-link active">{row.value}</Link>
                                 </span>
                             )
                         },

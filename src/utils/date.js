@@ -1,5 +1,5 @@
 export function formatDateLast30() {
-    var d = new Date(),
+    let d = new Date(),
         month = '' + (d.getMonth()),
         day = '' + d.getDate(),
         year = d.getFullYear();

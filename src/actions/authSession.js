@@ -27,7 +27,7 @@ export function handleLogin(username, pw){
     //return a function, use middleware thunk
     return (dispatch) => {
         let token = (username+pw);
-        var sData = SDataService(endPoint);
+        const sData = SDataService(endPoint);
 
         sData.setAuthenticationParameters(username,pw)
             .then((res)=>{

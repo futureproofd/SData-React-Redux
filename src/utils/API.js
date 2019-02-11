@@ -2,11 +2,11 @@ import axios from 'axios';
 
 export function SDataService(sdataUri, username, password) {
 
-  var _config = {};
-  var service = {
+  let _config = {};
+  const service = {
 
     setAuthenticationParameters: function (newUsername, newPassword) {
-      var basicAuth = 'Basic ' + btoa(newUsername + ':' + newPassword);
+      let basicAuth = 'Basic ' + btoa(newUsername + ':' + newPassword);
       _config = {
         headers: {
           'Authorization': basicAuth,
@@ -20,12 +20,12 @@ export function SDataService(sdataUri, username, password) {
     },
 
     get: function(resourceKind, id, queryArgs, callback) {
-      var url = sdataUri + resourceKind + '(\'' + id + '\')?format=json';
+      let url = sdataUri + resourceKind + '(\'' + id + '\')?format=json';
       if(queryArgs) {
         if (typeof (queryArgs) == 'function' && !callback) {
           callback = queryArgs;
         } else {
-          for (var k in queryArgs) {
+          for (let k in queryArgs) {
             if (queryArgs.hasOwnProperty(k))
               url += '&' + k + '=' + encodeURIComponent(queryArgs[k]);
           }
@@ -35,7 +35,7 @@ export function SDataService(sdataUri, username, password) {
     },
 
     read: function (resourceKind, where, queryArgs, callback) {
-      var url = sdataUri + resourceKind + '?format=json'
+      let url = sdataUri + resourceKind + '?format=json'
       if (where && !(queryArgs && 'where' in queryArgs)) {
         //encode the URI for sData, space-delimited where clause
         url += '&where=' + encodeURIComponent(where)
@@ -44,7 +44,7 @@ export function SDataService(sdataUri, username, password) {
         if (typeof (queryArgs) == 'function' && !callback) {
           callback = queryArgs;
         } else {
-          for (var k in queryArgs) {
+          for (let k in queryArgs) {
             if (queryArgs.hasOwnProperty(k))
               url += '&' + k + '=' + encodeURIComponent(queryArgs[k]);
           }
@@ -61,8 +61,8 @@ export function SDataService(sdataUri, username, password) {
   return service;
 
   function handleSdataResponse(requestPromise, expectedStatusCode, callback) {
-    var p = requestPromise.then((response) => {
-      var body = response.data
+    let p = requestPromise.then((response) => {
+      let body = response.data
 
       if(response.status !== expectedStatusCode) {
         return Promise.reject({response})

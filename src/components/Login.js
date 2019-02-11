@@ -22,7 +22,7 @@ class Login extends Component{
                     placeholder='password'
                     ref={(pwInput) => this.pwInput = pwInput}
                 />
-                <button onClick={this.handleClick} className="btn btn-primary">Login</button>
+                <button onClick={this.handleClick} className={"btn btn-primary"}>Login</button>
             </div>
         )
     }

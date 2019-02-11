@@ -12,14 +12,14 @@ class DetailContainer extends Component {
     }
 
     fetchDetailData(){
-        const id = this.props.match.params.id;
-        var entityType = this.getEntityType();
-        var singleEntity = this.props.entity[entityType].$resources.find(x => x.$key === id);
+        let id = this.props.match.params.id;
+        let entityType = this.getEntityType();
+        let singleEntity = this.props.entity[entityType].$resources.find(x => x.$key === id);
         this.props.dispatch(handleSingleEntity(singleEntity, entityType));
     }
 
     getEntityType=() => {
-        for(var i = 0; i < entityTypes.length; i++){
+        for(let i = 0; i < entityTypes.length; i++){
             if(this.props.entity[entityTypes[i]] 
                 && this.props.location.pathname.indexOf(entityTypes[i].substr(0,entityTypes[i].length-1)) > 0)
             {
@@ -29,7 +29,6 @@ class DetailContainer extends Component {
     }
 
     render(){
-        debugger
         const { session, entity, isFetching } = this.props;
         return (
             <div style={{ flex: 1, padding: "2px" }}>
