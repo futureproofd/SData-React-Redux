@@ -5,7 +5,6 @@ import {
     Route,
     Link
 } from 'react-router-dom';
-import "react-table/react-table.css";
 
 import DetailContainer from '../detail/DetailContainer';
 

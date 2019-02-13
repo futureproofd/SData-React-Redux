@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 
+import "../../styles/layout.css";
 
 class DetailView extends Component{
         render(){
             return( 
-                <div>
-                    details
-                </div>
+                <aside>Details</aside>
             );
         }
     }

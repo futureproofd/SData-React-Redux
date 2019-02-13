@@ -7,6 +7,7 @@ import {formatDateLast30 }from '../../utils/date';
 import GridView from './GridView';
 import Loading from '../Loading';
 
+
 class GridContainer extends Component {
 
     componentDidMount(){
@@ -22,21 +23,19 @@ class GridContainer extends Component {
     render(){
         const { session, entity, isFetching} = this.props;
         return (
-            <div style={{ flex: 1, padding: "2px" }}>
-
-            {isFetching ? (
-                <Loading isFetching />
-            ) : (
-                session.isAuthenticated && !isFetching ? (
-                    <div>
-                        <GridView entity={entity}/>
-                    </div> 
-                ):(
-                    <div>Please Login</div>
-                )
-            )}
-            </div>
-
+            <React.Fragment>
+                {isFetching ? (
+                    <Loading isFetching />
+                ) : (
+                    session.isAuthenticated && !isFetching ? (
+                        <article>
+                            <GridView entity={entity}/>
+                        </article> 
+                    ):(
+                        <div>Please Login</div>
+                    )
+                )}
+            </React.Fragment>
         )
     }
 }
