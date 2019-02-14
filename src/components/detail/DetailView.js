@@ -5,7 +5,7 @@ import "../../styles/layout.css";
 class DetailView extends Component{
         render(){
             return( 
-                <aside>Details</aside>
+                <div>Details</div>
             );
         }
     }

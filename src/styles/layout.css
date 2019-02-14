@@ -8,7 +8,7 @@
     margin: 0;
   }
   .outer-col-1 {
-    background: #D7E8D4;
+    background: white;
     flex: 1;
   }
   .outer-col-2 {
@@ -27,13 +27,19 @@
     min-height: 60vh;
   }
   .inner-row aside {
-    background: beige;
+    background: rgb(250, 250, 250);
     flex: 1;
   }
-  header, footer {
-    background: yellowgreen;
-    height: 20vh;
+
+ footer {
+    background: rgb(250, 250, 250);
+    height: 5vh;
   }
+  header {
+    background: rgb(49, 144, 242);
+    height: 15vh;
+  }
+
   header, footer, article, nav, aside {
     padding: 1em;
   }

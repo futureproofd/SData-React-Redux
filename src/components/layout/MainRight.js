@@ -5,8 +5,12 @@ import {
 } from 'react-router-dom';
 
 import GridContainer from '../grid/GridContainer';
-
+/*
+    Define layout elements/styles here
+    By default, nest a GridContainer component
+*/
 class MainRight extends Component {
+
     render(){
         const { isAuthenticated } = this.props;
         const routes = [

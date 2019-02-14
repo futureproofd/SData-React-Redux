@@ -28,9 +28,7 @@ class GridContainer extends Component {
                     <Loading isFetching />
                 ) : (
                     session.isAuthenticated && !isFetching ? (
-                        <article>
-                            <GridView entity={entity}/>
-                        </article> 
+                        <GridView entity={entity} />
                     ):(
                         <div>Please Login</div>
                     )

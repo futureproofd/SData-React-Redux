@@ -14,16 +14,19 @@ class DetailContainer extends Component {
     fetchDetailData(){
         let id = this.props.match.params.id;
         let entityType = this.getEntityType();
+        debugger;
         let singleEntity = this.props.entity[entityType].$resources.find(x => x.$key === id);
         this.props.dispatch(handleSingleEntity(singleEntity, entityType));
     }
 
     getEntityType=() => {
+        debugger;
         for(let i = 0; i < entityTypes.length; i++){
-            if(this.props.entity[entityTypes[i]] 
-                && this.props.location.pathname.indexOf(entityTypes[i].substr(0,entityTypes[i].length-1)) > 0)
-            {
-                return entityTypes[i];
+            if(this.props.entity[entityTypes[i]]){ 
+                let entity = this.props.location.pathname; //ex string: leads/id
+                if(entity.indexOf(entityTypes[i].toLowerCase()) > 0){
+                    return entityTypes[i];
+                }
             }
         }
     }
@@ -31,22 +34,17 @@ class DetailContainer extends Component {
     render(){
         const { session, entity, isFetching } = this.props;
         return (
-            <div style={{ flex: 1, padding: "2px" }}>
-
-            {isFetching ? (
-                <Loading isFetching />
-            ) : (
-                session.isAuthenticated && !isFetching ? (
-                    <div>
+            <React.Fragment>
+                {isFetching ? (
+                    <Loading isFetching />
+                ) : (
+                    session.isAuthenticated && !isFetching ? (
                         <DetailView entity={entity}/>
-                    </div> 
-                ):(
-                    <div>Please Login</div>
-                )
-            )}
-                
-            </div>
-
+                    ):(
+                        <div>Please Login</div>
+                    )
+                )}
+            </React.Fragment>
         )
     }
 }
