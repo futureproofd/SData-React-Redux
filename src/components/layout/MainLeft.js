@@ -16,7 +16,7 @@ class MainLeft extends Component {
             <React.Fragment>
                 <article>
                     <Route
-                        path='/leads/:id'
+                        path='/:entityType/:id'
                         component={DetailContainer}
                     />
                 </article> 

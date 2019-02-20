@@ -2,6 +2,8 @@ export const ENTITY_LIST = "ENTITY_LIST";
 export const ENTITY_DETAIL = "ENTITY_DETAIL";
 export const ENTITY_REQUEST = "ENTITY_REQUEST";
 
+import { entityTypes } from '../config/config';
+
 function _entityList(data, entityType){
     return {
         'type' : ENTITY_LIST,
@@ -33,13 +35,9 @@ export function handleEntitiesQuery(session, entity, where){
         session.sData.read(entity, where)
         .then((res) =>{
             if(res){
-                let type = "";
-                if(res.$descriptor.indexOf('lead') > 0){
-                    type = "Leads"
-                }else if(res.$descriptor.indexOf('account') > 0){
-                    type = "Accounts"
-                }
-                dispatch(_entityList(res, type));
+                entityTypes.forEach(e => {
+                    res.$descriptor.indexOf(e) > 0 ? dispatch(_entityList(res, e)) : '';
+                })
             } else {
                 console.log('error');
             } 

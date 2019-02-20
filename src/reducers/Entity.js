@@ -7,6 +7,7 @@ export default function entity (state, action){
                 {
                     ...state,
                     [action.entityType] : action.entity,
+                    'entityType': action.entityType[0],
                     'isFetching' : false
                 }
             )
@@ -15,6 +16,7 @@ export default function entity (state, action){
                 {
                     ...state,
                     [action.entityType +' Detail'] : action.entity,
+                    'entityType': action.entityType[0],
                     'isFetching' : false
                 }
             )

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { handleEntitiesQuery } from '../../actions/getEntity';
+import { handleEntitiesQuery, handleSingleEntity } from '../../actions/getEntity';
 import {formatDateLast30 }from '../../utils/date';
 
 import GridView from './GridView';
 import Loading from '../Loading';
+import getEntityType from '../../utils/entity';
 
 
 class GridContainer extends Component {
@@ -20,15 +21,20 @@ class GridContainer extends Component {
         this.props.dispatch(handleEntitiesQuery(this.props.session, entity, where));
     }
 
+    onRowClick = (entityType, singleEntity) => {
+        this.props.dispatch(handleSingleEntity(singleEntity, entityType));
+    }
+
     render(){
         const { session, entity, isFetching} = this.props;
+        let entityType = getEntityType(this.props);
         return (
             <React.Fragment>
                 {isFetching ? (
                     <Loading isFetching />
                 ) : (
                     session.isAuthenticated && !isFetching ? (
-                        <GridView entity={entity} />
+                        <GridView entity={entity} entityType={entityType} onRowClick={this.onRowClick} />
                     ):(
                         <div>Please Login</div>
                     )
