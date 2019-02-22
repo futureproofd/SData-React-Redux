@@ -22,23 +22,42 @@ function _logoutSession(){
     }
 }
 
-//action creators
+/*action creators */
+
+//Handles initial login
 export function handleLogin(username, pw){
     //return a function, use middleware thunk
     return (dispatch) => {
-        let token = (username+pw);
+        let token = btoa(username+ ':' + pw);
         const sData = SDataService(endPoint);
 
         sData.setAuthenticationParameters(username,pw)
             .then((res)=>{
-                res ? dispatch(_userSession(sData,token))
-                    : console.log('error'); //todo: dispatch login error
+                if(res){
+                    //stores our 'token' for refreshing session
+                    localStorage.setItem('token',token);
+                    dispatch(_userSession(sData,token))
+                }else{
+                    console.log('error'); //todo: dispatch login error
+                } 
             })
+    }
+}
+
+//Handles browser refresh (checks localStorage for fake token)
+export function reAuthenticate(token){
+    return (dispatch) => {
+        let creds = atob(token);
+        let username = creds.substring(0,creds.indexOf(':'));
+        let password = creds.substring(creds.indexOf(':')+1,creds.length);
+        const sData = SDataService(endPoint,username,password);
+        dispatch(_userSession(sData,token));
     }
 }
 
 export function handleLogout(){
     return (dispatch) => {
+        localStorage.removeItem('token');
         dispatch(_logoutSession())
     }
 }

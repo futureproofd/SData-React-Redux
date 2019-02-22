@@ -9,6 +9,9 @@ class NavSidebar extends Component{
                 <nav className={"outer-col-1"}>
                     <ul>
                         <li className="nav-item">
+                            <Link to="/" className="nav-link active">Home</Link>
+                        </li>
+                        <li className="nav-item">
                             <Link to="/accounts" className="nav-link active">Accounts</Link>
                         </li>
                         <li className="nav-item">

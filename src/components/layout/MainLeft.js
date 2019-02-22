@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 
 import DetailContainer from '../detail/DetailContainer';
+import Home from '../Home'
 
 /*
     Define layout elements/styles here
@@ -19,6 +20,7 @@ class MainLeft extends Component {
                         path='/:entityType/:id'
                         component={DetailContainer}
                     />
+                    <Route exact path="/" component={Home} />
                 </article> 
             </React.Fragment>
         )
