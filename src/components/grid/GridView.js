@@ -1,6 +1,7 @@
 import React, { Component } from 'react'; 
 import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 export default class GridView extends Component { 
 
@@ -59,3 +60,9 @@ export default class GridView extends Component {
         )
     }
 }
+
+GridView.propTypes = {
+    entity : PropTypes.object.isRequired,
+    entityType : PropTypes.string.isRequired,
+    onRowClick : PropTypes.func.isRequired
+};

@@ -9,31 +9,49 @@ class DetailContainer extends Component {
     constructor(props){
         super(props);
 
-        const { entity } = this.props;
-        const entityDetail = entity.entityType+" Detail";
+        const entity  = this.props.entity;
+        const entityDetail = entity[entity.entityType+" Detail"];
 
+        //store any changes to individual entity records here
         this.state = {
-            email : entity[entityDetail].Email
+            Key : entityDetail.$key,
+            detailRecord : entity.entityType + " Detail",
+            Email : entityDetail.Email,
+            Notes : entityDetail.Notes,
+            field : null,
+            draft : false
         };
     }
 
-    //On props change, get newly selected entity values in state
-    componentWillReceiveProps(nextProps){
-        let entityDetail = this.props.entity.entityType+" Detail";
-        if (nextProps.entity[entityDetail] !== this.props.entity[entityDetail]){
-            this.setState({
-                email: nextProps.entity[entityDetail].Email
-            })
+    //if entity prop changes, update form fields
+    static getDerivedStateFromProps(props, state){
+        if(props.entity[state.detailRecord].$key !== state.$key){
+            if(state.draft){
+                return { 
+                    [state.field] : state[state.field],
+                    draft : false 
+                }
+            } else {
+                return { 
+                    Key : props.entity[state.detailRecord].$key,
+                    Email : props.entity[state.detailRecord].Email,
+                    Notes : props.entity[state.detailRecord].Notes
+                }
+            }
         }
+        return null;
     }
 
-    handleChange = (event) => {
-        this.setState({ email: event.target.value });
+    handleChange = (event, fieldName) => {
+        this.setState({ 
+            [fieldName] : event.target.value,
+            field : fieldName,
+            draft : true
+        });
     }
 
     onSubmit = (entity) => {
-        const entityDetail = this.props.entity.entityType + " Detail";
-        this.props.dispatch(handleEntityUpdate(this.props.session, entity.entityType, entity[entityDetail]));
+        this.props.dispatch(handleEntityUpdate(this.props.session, entity.entityType, entity[this.state.detailRecord]));
     }
 
     render(){
@@ -44,14 +62,24 @@ class DetailContainer extends Component {
                     <Loading isFetching />
                 ):(
                     session.isAuthenticated && !isFetching ? (
-                        <SingleInput
-                            inputType={'text'}
-                            title={'Email'}
-                            name={'Email'}
-                            controlFunc={this.handleChange}
-                            content={this.state.email}
-                            placeholder={'Enter Email here'} 
-                        />
+                        <form className="container" onSubmit={this.onSubmit}>
+                            <SingleInput
+                                inputType={'text'}
+                                title={'Email'}
+                                name={'Email'}
+                                controlFunc={this.handleChange}
+                                content={this.state.Email}
+                                placeholder={'Enter Email here'} 
+                            />
+                            <SingleInput
+                                inputType={'text'}
+                                title={'Notes'}
+                                name={'Notes'}
+                                controlFunc={this.handleChange}
+                                content={this.state.Notes}
+                                placeholder={'Enter Notes here'} 
+                            />
+                        </form>
                     ):(
                         <div>Please Login</div>
                     )
