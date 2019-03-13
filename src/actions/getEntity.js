@@ -1,6 +1,7 @@
 export const ENTITY_LIST = "ENTITY_LIST";
 export const ENTITY_DETAIL = "ENTITY_DETAIL";
-export const ENTITY_REQUEST = "ENTITY_REQUEST";
+export const ENTITY_LIST_REQUEST = "ENTITY_LIST_REQUEST";
+export const ENTITY_DETAIL_REQUEST = "ENTITY_DETAIL_REQUEST";
 
 import { entityTypes } from '../config/config';
 
@@ -9,7 +10,7 @@ function _entityList(data, entityType){
         'type' : ENTITY_LIST,
         'entityType' : [entityType],
         'entity' : data,
-        'isFetching' : false
+        'isListFetching' : false
     }
 }
 
@@ -18,20 +19,27 @@ function _entityDetail(data, entityType){
         'type' : ENTITY_DETAIL,
         'entityType' : [entityType],
         'entity' : data,
-        'isFetching': false
+        'isDetailFetching': false
     }
 }
 
-function _entityRequest(){
+function _entityListRequest(){
     return {
-        'type' : ENTITY_REQUEST,
-        'isFetching' : true
+        'type' : ENTITY_LIST_REQUEST,
+        'isListFetching' : true
+    }
+}
+
+function _entityDetailRequest(){
+    return {
+        'type' : ENTITY_DETAIL_REQUEST,
+        'isDetailFetching' : true
     }
 }
 
 export function handleEntitiesQuery(session, entity, where){
     return (dispatch) => {
-        dispatch(_entityRequest());
+        dispatch(_entityListRequest());
         session.sData.read(entity, where)
         .then((res) =>{
             if(res){
@@ -47,9 +55,24 @@ export function handleEntitiesQuery(session, entity, where){
     }
 };
 
-export function handleSingleEntity(entity, entityType){
+export function handleSingleEntity(session, entity, entityType){
     return (dispatch) => {
-        dispatch(_entityRequest());
-        dispatch(_entityDetail(entity, entityType));
+        //request is in the form of an ID, i.e. direct url link- not an entity object
+        if(typeof entity === 'string'){
+            dispatch(_entityDetailRequest());
+            session.sData.get(entityType, entity)
+            .then((res) => {
+                if(res){
+                    dispatch(_entityDetail(res, entityType));
+                }else{
+                    console.log('error');
+                }
+            }).catch((e) => {
+                alert('an error occurred fetching entity: '+ e);
+            })
+        } else {
+            dispatch(_entityDetailRequest());
+            dispatch(_entityDetail(entity, entityType));
+        }
     }
 }

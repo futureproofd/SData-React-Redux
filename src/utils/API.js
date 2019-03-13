@@ -57,7 +57,6 @@ export function SDataService(sdataUri, username, password) {
       // summary:
       //  Update designated resource.  The id ($key) must be provided as part of the data.
       var url = sdataUri + resourceKind + '("' + data.$key + '")?format=json';
-      debugger
       return handleSdataResponse(axios.put(url, data, _config), 200, callback);
     },
   };

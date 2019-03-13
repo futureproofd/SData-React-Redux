@@ -15,25 +15,26 @@ class GridContainer extends Component {
         this.fetchGridData();
     }
 
-    fetchGridData(){
+    fetchGridData = () => {
         const entity = this.props.match.path.substr(1);
         const where = 'CreateDate ge \@'+formatDateLast30()+'\@';
         this.props.dispatch(handleEntitiesQuery(this.props.session, entity, where));
     }
 
     onRowClick = (entityType, singleEntity) => {
-        this.props.dispatch(handleSingleEntity(singleEntity, entityType));
+        this.props.dispatch(handleSingleEntity(this.props.session, singleEntity, entityType));
     }
 
     render(){
-        const { session, entity, isFetching} = this.props;
+        const { session, entity, isListFetching } = this.props;
+
         let entityType = getEntityType(this.props);
         return (
             <React.Fragment>
-                {isFetching ? (
-                    <Loading isFetching />
+                {isListFetching ? (
+                    <Loading isListFetching />
                 ) : (
-                    session.isAuthenticated && !isFetching ? (
+                    session.isAuthenticated && !isListFetching ? (
                         <GridView entity={entity} entityType={entityType} onRowClick={this.onRowClick} />
                     ):(
                         <div>Please Login</div>
@@ -46,12 +47,12 @@ class GridContainer extends Component {
 
 function mapStateToProps(state) {
     const { session, token, entity } = state;
-    const { isFetching } = entity ||  { isFetching : true }; 
+    const { isListFetching } = entity ||  { isListFetching : true }; 
     return {
         session,
         token,
         entity,
-        isFetching
+        isListFetching
     }
   }
 

@@ -1,53 +1,102 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import SingleInput from './SingleInput'
+import SingleInput from './SingleInput';
+import Textbox from './Textbox';
 import Loading from '../Loading';
 import { handleEntityUpdate } from '../../actions/putEntity';
+import { handleSingleEntity } from '../../actions/getEntity';
+import { validateEmail } from '../../utils/validate';
+import PropTypes from 'prop-types';
 
 class DetailContainer extends Component {
     constructor(props){
         super(props);
 
-        const entity  = this.props.entity;
-        const entityDetail = entity[entity.entityType+" Detail"];
+        const { entity }  = this.props;
+        if(entity){
+            const entityDetail = entity[entity.entityType+" Detail"];
+            //store in local state, any changes to entity record here
+            this.state = {
+                Key : entityDetail.$key,
+                detailRecord : entity.entityType + " Detail",
+                Email : entityDetail.Email,
+                Notes : entityDetail.Notes,
+                field : null,
+                draft : false,
+                dirty : false
+            };
+        }else{
+            this.state = {
+                    Key : '',
+                    detailRecord : '',
+                    Email : '',
+                    Notes : '',
+                    field : '',
+                    draft : false,
+                    dirty : false
+            };
+        }
+    }
 
-        //store any changes to individual entity records here
-        this.state = {
-            Key : entityDetail.$key,
-            detailRecord : entity.entityType + " Detail",
-            Email : entityDetail.Email,
-            Notes : entityDetail.Notes,
-            field : null,
-            draft : false
-        };
+    /*
+      From direct URL navigation (POP) to a detail entity
+    */
+    componentDidMount(){
+        const { entity, history, dispatch, session, match } = this.props;
+
+        if(entity === null && history.action === "POP"){
+            let { entityType, id } = match.params;
+            dispatch(handleSingleEntity(session, id, entityType));
+        }
     }
 
     //if entity prop changes, update form fields
     static getDerivedStateFromProps(props, state){
-        if(props.entity[state.detailRecord].$key !== state.$key){
-            if(state.draft){
-                return { 
-                    [state.field] : state[state.field],
-                    draft : false 
-                }
-            } else {
-                return { 
-                    Key : props.entity[state.detailRecord].$key,
-                    Email : props.entity[state.detailRecord].Email,
-                    Notes : props.entity[state.detailRecord].Notes
+        if(props.isDetailFetching){
+            return null;
+        }
+
+        if(props.entity[props.entity.entityType + " Detail"]){
+            let detailRecord = props.entity.entityType + " Detail";
+            if(props.entity[detailRecord].$key !== state.$key){
+                if(state.draft){
+                    return { 
+                        [state.field] : state[state.field],
+                        draft : false 
+                    }
+                } else {
+                    return { 
+                        Key : props.entity[detailRecord].$key,
+                        Email : props.entity[detailRecord].Email,
+                        Notes : props.entity[detailRecord].Notes
+                    }
                 }
             }
         }
         return null;
     }
 
+    /*
+        Basic validity check and setState
+    */
     handleChange = (event, fieldName) => {
-        this.setState({ 
-            [fieldName] : event.target.value,
-            field : fieldName,
-            draft : true
-        });
+        let valid = false;
+
+        if(fieldName === 'Email'){
+            valid = validateEmail(event.target.value);
+        } else {
+            valid = true;
+        }
+
+        if(valid){
+            this.setState({ 
+                [fieldName] : event.target.value,
+                field : fieldName,
+                draft : true,
+                dirty : true
+            });
+        }
     }
 
     onSubmit = (entity) => {
@@ -55,13 +104,13 @@ class DetailContainer extends Component {
     }
 
     render(){
-        const { session, isFetching } = this.props;
+        const { session, isDetailFetching, entity } = this.props;
         return (
             <React.Fragment>
-                {isFetching ? (
-                    <Loading isFetching />
+                {isDetailFetching ? (
+                    <Loading isDetailFetching />
                 ):(
-                    session.isAuthenticated && !isFetching ? (
+                    session.isAuthenticated && entity ? (
                         <form className="container" onSubmit={this.onSubmit}>
                             <SingleInput
                                 inputType={'text'}
@@ -71,13 +120,14 @@ class DetailContainer extends Component {
                                 content={this.state.Email}
                                 placeholder={'Enter Email here'} 
                             />
-                            <SingleInput
-                                inputType={'text'}
+                            <Textbox
                                 title={'Notes'}
+                                rows={2}
                                 name={'Notes'}
-                                controlFunc={this.handleChange}
                                 content={this.state.Notes}
+                                resize={true}
                                 placeholder={'Enter Notes here'} 
+                                controlFunc={this.handleChange}
                             />
                         </form>
                     ):(
@@ -89,14 +139,21 @@ class DetailContainer extends Component {
     }
 }
 
+DetailContainer.propTypes = {
+    session : PropTypes.object.isRequired
+}
+
 function mapStateToProps(state) {
     const { session, entity } = state;
-    const { isFetching } = entity.entityType ||  { isFetching : true }; 
-    return {
+    const { isDetailFetching } = entity || { isDetailFetching : true }; 
+
+    const stateProps = {
         session,
         entity,
-        isFetching
+        isDetailFetching
     }
+
+    return { ...stateProps }
   }
 
 export default connect(mapStateToProps)(DetailContainer);
