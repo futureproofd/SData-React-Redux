@@ -10,31 +10,29 @@ import { validateEmail } from '../../utils/validate';
 import PropTypes from 'prop-types';
 
 class DetailContainer extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         const { entity }  = this.props;
-        if(entity){
+        if(entity) {
             const entityDetail = entity[entity.entityType+" Detail"];
             //store in local state, any changes to entity record here
             this.state = {
                 Key : entityDetail.$key,
                 detailRecord : entity.entityType + " Detail",
-                Email : entityDetail.Email,
-                Notes : entityDetail.Notes,
-                field : null,
-                draft : false,
-                dirty : false
+                Email : { value : entityDetail.Email, isDirty : false },
+                Notes : { value : entityDetail.Notes, isDirty : false },
+                draftField : null,
+                editing : false
             };
-        }else{
+        } else {
             this.state = {
                     Key : '',
                     detailRecord : '',
-                    Email : '',
-                    Notes : '',
-                    field : '',
-                    draft : false,
-                    dirty : false
+                    Email : {},
+                    Notes : {},
+                    draftField : '',
+                    editing : false
             };
         }
     }
@@ -60,16 +58,20 @@ class DetailContainer extends Component {
         if(props.entity[props.entity.entityType + " Detail"]){
             let detailRecord = props.entity.entityType + " Detail";
             if(props.entity[detailRecord].$key !== state.$key){
-                if(state.draft){
+                if(state.editing){
+                    //Field is editing
                     return { 
-                        [state.field] : state[state.field],
-                        draft : false 
+                        [state.draftField] : {
+                            value : state[state.draftField].value,
+                            isDirty : true
+                        },
+                        editing : false 
                     }
                 } else {
                     return { 
                         Key : props.entity[detailRecord].$key,
-                        Email : props.entity[detailRecord].Email,
-                        Notes : props.entity[detailRecord].Notes
+                        Email : { value : props.entity[detailRecord].Email },
+                        Notes : { value : props.entity[detailRecord].Notes }
                     }
                 }
             }
@@ -88,13 +90,13 @@ class DetailContainer extends Component {
         } else {
             valid = true;
         }
-
         if(valid){
             this.setState({ 
-                [fieldName] : event.target.value,
-                field : fieldName,
-                draft : true,
-                dirty : true
+                [fieldName] : { 
+                    value : event.target.value
+                },
+                draftField : fieldName,
+                editing : true
             });
         }
     }
@@ -105,6 +107,7 @@ class DetailContainer extends Component {
 
     render(){
         const { session, isDetailFetching, entity } = this.props;
+        let { Email, Notes } = this.state;
         return (
             <React.Fragment>
                 {isDetailFetching ? (
@@ -117,14 +120,16 @@ class DetailContainer extends Component {
                                 title={'Email'}
                                 name={'Email'}
                                 controlFunc={this.handleChange}
-                                content={this.state.Email}
+                                content={ Email.value }
+                                isDirty={ Email.isDirty }
                                 placeholder={'Enter Email here'} 
                             />
                             <Textbox
                                 title={'Notes'}
                                 rows={2}
                                 name={'Notes'}
-                                content={this.state.Notes}
+                                content={ Notes.value }
+                                isDirty={ Notes.isDirty }
                                 resize={true}
                                 placeholder={'Enter Notes here'} 
                                 controlFunc={this.handleChange}

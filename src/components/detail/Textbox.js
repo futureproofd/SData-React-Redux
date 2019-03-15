@@ -8,7 +8,7 @@ const Textbox = (props) => (
 	<div className="form-group">
 		<label className="form-label">{props.title}</label>
 		<textarea
-			className="form-input"
+            className={props.isDirty ? "dirty" : "form-input"}
 			style={props.resize ? null : {resize: 'none'}}
 			name={props.name}
 			rows={props.rows}

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import '../../styles/form.css';
+
 /*
 Controlled Component
 */
@@ -8,7 +10,7 @@ const SingleInput = (props) => (
     <div className="form-group">
         <label className="form-label">{props.title}</label>
         <input
-            className="form-input"
+            className={props.isDirty ? "dirty" : "form-input"}
             name={props.name}
             type={props.inputType}
             value={props.content}
@@ -26,7 +28,7 @@ SingleInput.propTypes = {
 	content: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.number,
-	]).isRequired,
+    ]).isRequired,
 	placeholder: PropTypes.string,
 };
 
