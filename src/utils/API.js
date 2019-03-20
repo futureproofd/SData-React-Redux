@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { resourceQueryTypes } from '../config/config';
 
 export function SDataService(sdataUri, username, password) {
 
@@ -20,7 +21,15 @@ export function SDataService(sdataUri, username, password) {
     },
 
     get: function(resourceKind, id, queryArgs, callback) {
-      let url = sdataUri + resourceKind + '(\'' + id + '\')?format=json';
+      let url = sdataUri + resourceKind; 
+
+      if(resourceKind === resourceQueryTypes.picklist){
+        url += '(name eq \'' + id + '\')/items?format=json';
+        url = url.replace('dynamic','system'); 
+      }else{
+        url += '(\'' + id + '\')?format=json';
+      }
+
       if(queryArgs) {
         if (typeof (queryArgs) == 'function' && !callback) {
           callback = queryArgs;

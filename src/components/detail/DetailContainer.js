@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import SingleInput from './SingleInput';
 import Textbox from './Textbox';
 import Loading from '../Loading';
+import PickList from './PickList';
 import { handleEntityUpdate } from '../../actions/putEntity';
 import { handleSingleEntity } from '../../actions/getEntity';
 import { validateEmail } from '../../utils/validate';
+import { resourceQueryTypes }  from '../../config/config';
 import PropTypes from 'prop-types';
 
 class DetailContainer extends Component {
@@ -14,6 +16,7 @@ class DetailContainer extends Component {
         super(props);
 
         const { entity }  = this.props;
+
         if(entity) {
             const entityDetail = entity[entity.entityType+" Detail"];
             //store in local state, any changes to entity record here
@@ -22,6 +25,7 @@ class DetailContainer extends Component {
                 detailRecord : entity.entityType + " Detail",
                 Email : { value : entityDetail.Email, isDirty : false },
                 Notes : { value : entityDetail.Notes, isDirty : false },
+                Status : { value : entityDetail.Status, isDirty : false},
                 draftField : null,
                 editing : false
             };
@@ -31,6 +35,7 @@ class DetailContainer extends Component {
                     detailRecord : '',
                     Email : {},
                     Notes : {},
+                    Status : {},
                     draftField : '',
                     editing : false
             };
@@ -42,6 +47,8 @@ class DetailContainer extends Component {
     */
     componentDidMount(){
         const { entity, history, dispatch, session, match } = this.props;
+        
+        this.getLocalResources(this.props.session);
 
         if(entity === null && history.action === "POP"){
             let { entityType, id } = match.params;
@@ -71,12 +78,43 @@ class DetailContainer extends Component {
                     return { 
                         Key : props.entity[detailRecord].$key,
                         Email : { value : props.entity[detailRecord].Email },
-                        Notes : { value : props.entity[detailRecord].Notes }
+                        Notes : { value : props.entity[detailRecord].Notes },
+                        Status : { value : props.entity[detailRecord].Status }
                     }
                 }
             }
         }
         return null;
+    }
+
+    getLocalResources = (session) => {
+        this.handleSingleResource(
+            session,
+            resourceQueryTypes.picklist,
+            'Lead Status Web'
+        );
+    }
+
+    handleSingleResource = (session, resource, identifier) => {
+        session.sData.get(resource, identifier)
+            .then((res) => {
+                if(res){
+                    let vals = {[identifier] : []};
+                    [res.$resources].forEach((arr) =>{
+                        arr.forEach((obj)=>{
+                            vals[identifier].push(obj.text);
+                        })
+                    })
+
+                    this.setState({
+                        [resource] : vals
+                    });
+                }else{
+                    console.log('error');
+                }
+            }).catch((e) => {
+                alert('an error occurred fetching '+resource, e);
+            })
     }
 
     /*
@@ -90,6 +128,7 @@ class DetailContainer extends Component {
         } else {
             valid = true;
         }
+
         if(valid){
             this.setState({ 
                 [fieldName] : { 
@@ -107,7 +146,8 @@ class DetailContainer extends Component {
 
     render(){
         const { session, isDetailFetching, entity } = this.props;
-        let { Email, Notes } = this.state;
+        let { Email, Notes, Status, picklists } = this.state;
+
         return (
             <React.Fragment>
                 {isDetailFetching ? (
@@ -133,6 +173,15 @@ class DetailContainer extends Component {
                                 resize={true}
                                 placeholder={'Enter Notes here'} 
                                 controlFunc={this.handleChange}
+                            />
+                            <PickList
+                                title={ 'Status' }
+                                name={ 'Status' }
+                                value={ Status.value }
+                                controlFunc={ this.handleChange }
+                                isDirty={ Status.isDirty }
+                                placeholder={ 'Lead Status' }
+                                options={ picklists ? picklists['Lead Status Web'] : [] }
                             />
                         </form>
                     ):(
