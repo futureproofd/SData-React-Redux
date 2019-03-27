@@ -4,6 +4,6 @@ import session from './Auth';
 import entity from './Entity';
 
 export default combineReducers({
-    session,
-    entity
+  session,
+  entity,
 });

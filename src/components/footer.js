@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Footer extends Component {
-    render(){
-        return (
-            <React.Fragment>
-                <footer>SLX test footer</footer>
-            </React.Fragment>
-        )
-    }
-}
+const Footer = () => (
+  <React.Fragment>
+    <footer>SLX test footer</footer>
+  </React.Fragment>
+);
+
+export default Footer;

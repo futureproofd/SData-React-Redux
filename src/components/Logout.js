@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 
+const Logout = (props) => {
+  const handleClick = (e) => {
+    e.preventDefault();
+    props.logoutClick();
+  };
 
-export default class Logout extends Component{
+  return (
+    <button type="button" onClick={handleClick} className="btn btn-primary">
+      Sign out
+    </button>
+  );
+};
 
-    handleClick = (e) => {
-        e.preventDefault();
-        this.props.logoutClick();
-    };
-
-    render(){
-        return(
-            <button onClick={this.handleClick} className="btn btn-primary">Sign out</button>
-        )
-    }
-}
-
+export default Logout;

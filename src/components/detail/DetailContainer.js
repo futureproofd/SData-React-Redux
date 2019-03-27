@@ -44,9 +44,9 @@ class DetailContainer extends Component {
     }
   }
 
-  /*
-    From direct URL navigation (POP) to a detail entity
-    */
+  /**
+   * From direct URL navigation (POP) to a detail entity
+   */
   componentDidMount() {
     const {
       entity, history, dispatch, session, match,
