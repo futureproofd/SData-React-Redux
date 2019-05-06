@@ -1,4 +1,5 @@
 import { entityTypes } from '../config/config';
+import { handleError } from './errorHandler';
 
 export const ENTITY_LIST = 'ENTITY_LIST';
 export const ENTITY_DETAIL = 'ENTITY_DETAIL';
@@ -50,7 +51,7 @@ export function handleEntitiesQuery(session, entity, where) {
             }
           });
         } else {
-          console.log('error');
+          dispatch(handleError('call', `Error fetching ${entity} ${where}`));
         }
       })
       .catch(() => {
@@ -70,11 +71,11 @@ export function handleSingleEntity(session, entity, entityType) {
           if (res) {
             dispatch(entityDetail(res, entityType));
           } else {
-            console.log('error');
+            dispatch(handleError('call', `Error fetching ${entity} ${entityType}`));
           }
         })
         .catch((e) => {
-          alert(`an error occurred fetching entity: ${e}`);
+          dispatch(handleError('call', `Error fetching entity ${e}`));
         });
     } else {
       dispatch(entityDetailRequest());

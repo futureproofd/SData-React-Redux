@@ -53,9 +53,7 @@ export function SDataService(sdataUri, username, password) {
           'Access-Control-Allow-Origin': '*',
         },
       };
-      return handleSdataResponse(axios.get(sdataUri, config), 200).catch((err) => {
-        alert(err);
-      });
+      return handleSdataResponse(axios.get(sdataUri, config), 200).catch(err => ({ err }));
     },
 
     /**

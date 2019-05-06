@@ -2,9 +2,11 @@
 import { SDataService } from '../utils/API';
 
 import { endPoint } from '../config/config';
+import { handleError } from './errorHandler';
 
 export const USER_SESSION = 'USER_SESSION';
 export const LOGOUT_SESSION = 'LOGOUT_SESSION';
+export const LOGIN_ERROR = 'LOGIN_ERROR';
 
 function userSession(sData, token) {
   return {
@@ -12,6 +14,7 @@ function userSession(sData, token) {
     sData,
     token,
     isAuthenticated: true,
+    sessionError: { isError: false },
   };
 }
 
@@ -32,12 +35,12 @@ export function handleLogin(username, pw) {
     const sData = SDataService(endPoint);
 
     sData.setAuthenticationParameters(username, pw).then((res) => {
-      if (res) {
+      if (res.err) {
+        dispatch(handleError('app', res.err.response.status));
+      } else {
         // stores our 'token' for refreshing session
         localStorage.setItem('token', token);
         dispatch(userSession(sData, token));
-      } else {
-        console.log('error'); // todo: dispatch login error
       }
     });
   };

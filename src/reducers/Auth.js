@@ -9,7 +9,6 @@ export default function session(
 ) {
   switch (action.type) {
     case USER_SESSION:
-      // todo: put jwt in local storage for now
       return {
         sData: action.sData,
         token: action.token,

@@ -8,6 +8,7 @@ import Loading from '../Loading';
 import PickList from './PickList';
 import { handleEntityUpdate } from '../../actions/putEntity';
 import { handleSingleEntity } from '../../actions/getEntity';
+import { handleError } from '../../actions/errorHandler';
 import { validateEmail } from '../../utils/validate';
 import { resourceQueryTypes } from '../../config/config';
 
@@ -114,7 +115,7 @@ class DetailContainer extends Component {
     session.sData
       .get(resource, identifier)
       .then((res) => {
-        if (res) {
+        if (res.$resources.length > 0) {
           const vals = { [identifier]: [] };
           [res.$resources].forEach((arr) => {
             arr.forEach((obj) => {
@@ -126,11 +127,11 @@ class DetailContainer extends Component {
             [resource]: vals,
           });
         } else {
-          console.log('error');
+          this.props.dispatch(handleError('none', `${resource} ${identifier} not found`));
         }
       })
       .catch((e) => {
-        alert(`an error occurred fetching ${resource}`, e);
+        this.props.dispatch(handleError('call', e));
       });
   };
 
